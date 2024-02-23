@@ -1,7 +1,19 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Option.qml</file>
-        <file>Button.qml</file>
+        <file>Taskbar.qml</file>
+        <file>TaskbarItem.qml</file>
+        <file>Icon/Home.png</file>
+        <file>Icon/Home_Highlight.png</file>
+        <file>Icon/Statistical.png</file>
+        <file>Icon/Statistical_Highlight.png</file>
+        <file>Icon/Infor.png</file>
+        <file>Icon/Infor_Highlight.png</file>
+        <file>Icon/Setting.png</file>
+        <file>Icon/Setting_Highlight.png</file>
+        <file>Home.qml</file>
+        <file>Statistical.qml</file>
+        <file>Infor.qml</file>
+        <file>Setting.qml</file>
     </qresource>
 </RCC>

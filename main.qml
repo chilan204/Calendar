@@ -1,26 +1,26 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick.Controls 1.4
 
 Window {
     id: root
     visible: true
-    width: 450
-    height: 550
+    width: 540
+    height: 600
     title: qsTr("Calendar")
 
-    Calendar {
-        id: calendar
-        width: 400
-        height: 400
+    Loader {
+        id: loader
+        width: 500
+        height: 500
+        source: taskbar.screen
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    Option {
-        id: option
+    Taskbar {
+        id: taskbar
         anchors {
-            top: calendar.bottom
-            horizontalCenter: calendar.horizontalCenter
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
         }
     }
 }
