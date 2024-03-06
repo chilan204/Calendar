@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
+import "component/taskbar"
 
 Window {
     id: root

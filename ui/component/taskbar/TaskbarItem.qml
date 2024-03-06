@@ -4,27 +4,19 @@ Item {
     id: root
 
     property string name
-    property string nameImg
+    property string sourceImg
     property bool isCurrent: false
     signal clicked()
 
-    Rectangle {
-        id: highlightBar
-        width: parent.width
-        height: 3
-        radius: highlightBar.height
-        color: "turquoise"
-        visible: root.isCurrent
-    }
-
     Image {
         id: img
-        source: "qrc:/Icon/" + root.nameImg + (root.isCurrent ? "_Highlight.png" : ".png")
+        source: root.sourceImg
         width: 45
         height: 45
+        opacity: root.isCurrent ? 1 : 0.5
         anchors {
             horizontalCenter: parent.horizontalCenter
-            top: highlightBar.bottom
+            top: parent.top
             topMargin: 5
         }
     }
