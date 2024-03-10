@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         src/controller.cpp \
-        src/main.cpp
+        src/main.cpp \
+        src/model/informationmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -33,4 +34,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     src/appenum.h \
     src/controller.h \
-    src/define.h
+    src/define.h \
+    src/model/informationmodel.h

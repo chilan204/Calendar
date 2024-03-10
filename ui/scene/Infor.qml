@@ -87,6 +87,16 @@ Item {
         }
     }
 
+    Rectangle {
+        width: 30
+        height: 30
+        color: "red"
+        MouseArea {
+            anchors.fill: parent
+            onClicked: console.log("AAAA")
+        }
+    }
+
     InforPopUp {
         id: popup
         anchors.fill: parent

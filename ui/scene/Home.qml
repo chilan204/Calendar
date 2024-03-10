@@ -22,12 +22,12 @@ Item {
                         onClicked: popup.visible = true
                     }
 
-                    Row {
-                        Repeater {
-                            model: ["red","blue","yellow"]
-                            Rectangle { width: dayBox.width/3; height: dayBox.height; color: modelData }
-                        }
-                    }
+//                    Row {
+//                        Repeater {
+//                            model: ["red","blue","yellow"]
+//                            Rectangle { width: dayBox.width/3; height: dayBox.height; color: modelData }
+//                        }
+//                    }
                 }
                 Label {
                     id: dayDelegateText
