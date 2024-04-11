@@ -16,44 +16,9 @@
             "Tuition": 200000
         },
         {
-            "Color": "Green",
-            "Name": "A",
-            "Tuition": 200000
-        },
-        {
-            "Color": "Green",
-            "Name": "A",
-            "Tuition": 200000
-        },
-        {
-            "Color": "Green",
-            "Name": "A",
-            "Tuition": 200000
-        },
-        {
-            "Color": "Green",
-            "Name": "A",
-            "Tuition": 200000
-        },
-        {
-            "Color": "Green",
-            "Name": "A",
-            "Tuition": 200000
-        },
-        {
-            "Color": "Green",
-            "Name": "A",
-            "Tuition": 200000
-        },
-        {
-            "Color": "Green",
-            "Name": "A",
-            "Tuition": 200000
-        },
-        {
-            "Color": "Green",
-            "Name": "A",
-            "Tuition": 200000
+            "Color": "1",
+            "Name": "t",
+            "Tuition": 1
         }
     ]
 }

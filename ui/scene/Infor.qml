@@ -5,8 +5,6 @@ Item {
     id: root
     anchors.fill: parent
 
-    property int currentIndex
-
     Text {
         id: title
         text: qsTr("Thông tin học sinh")
@@ -30,7 +28,7 @@ Item {
             topMargin: 30
         }
 
-        model: CTRL.getLength()
+        model: SV_MODEL
 
         delegate: Rectangle {
             width: 350
@@ -44,21 +42,21 @@ Item {
                 onReleased: parent.scale = 1
                 onClicked: {
                     popup.visible = true
-                    currentIndex = index
+                    popup.init(model.name, model.color, model.tuition)
                 }
             }
 
             Column {
                 Text {
-                    text: '<b>Name:</b> ' + CTRL.getData(index).name
+                    text: '<b>Name:</b> ' + model.name
                     font.pixelSize: 15
                 }
                 Text {
-                    text: '<b>Color:</b> ' + CTRL.getData(index).color
+                    text: '<b>Color:</b> ' + model.color
                     font.pixelSize: 15
                 }
                 Text {
-                    text: '<b>Tuition:</b> ' + CTRL.getData(index).tuition
+                    text: '<b>Tuition:</b> ' + model.tuition
                     font.pixelSize: 15
                 }
                 anchors {
@@ -71,7 +69,7 @@ Item {
     }
 
     Rectangle {
-        id: newButton
+        id: addButton
         width: 70
         height: 30
         radius: 15
@@ -88,8 +86,8 @@ Item {
             onPressed: parent.scale = 0.9
             onReleased: parent.scale = 1
             onClicked: {
-                popup.visible = !popup.visible
-                CTRL.addSV("D","Green",200000)
+                popup.visible = true
+                popup.init("", "", "")
             }
         }
 

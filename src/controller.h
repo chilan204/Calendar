@@ -6,7 +6,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QDebug>
+#include "define.h"
+#include "sinhvienmodel.h"
 
 class Controller : public QObject
 {
@@ -16,52 +17,10 @@ public:
      static Controller *getInstance();
      void initialize();
 
+     SinhVienModel *svModel();
 private:
     explicit Controller(QObject *parent = nullptr);
-    int index;
-};
-
-struct sinhvien {
-    QString name;
-    QString color;
-    int tuition;
-
-    sinhvien(){};
-    sinhvien(QString addname, QString addcolor, int addtuition){
-        name = addname;
-        color = addcolor;
-        tuition = addtuition;
-    };
-};
-
-class controller : public QObject
-{
-    Q_OBJECT
-
-    Q_PROPERTY(QString name     READ name   WRITE setName   NOTIFY nameChanged)
-
-public:
-    explicit controller(QObject *parent = 0);
-
-    void readDatafromJson();
-
-    QString name();
-    void setName(QString name);
-
-    Q_INVOKABLE void setNamefromUI(int index, QString lastname);
-    Q_INVOKABLE int getLength();
-    Q_INVOKABLE QVariantMap getData(int index) const;
-    Q_INVOKABLE void addSV(QString name, QString color, int tuition);
-
-    void addSVjson();
-
-signals:
-    void nameChanged();
-
-private:
-    QList <sinhvien> m_listSV;
-    QJsonArray m_sinhvienArray;
-    QString m_name;
+    SinhVienModel m_svModel;
 };
 
 #endif // CONTROLLER_H
