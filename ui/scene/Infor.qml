@@ -5,6 +5,8 @@ Item {
     id: root
     anchors.fill: parent
 
+    property int currentIndex
+
     Text {
         id: title
         text: qsTr("Thông tin học sinh")
@@ -19,42 +21,20 @@ Item {
     ListView {
         id: listStudent
         width: 350
-        height: 390
+        height: 350
         clip: true
-        spacing: 10
+        spacing: 25
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: title.bottom
             topMargin: 30
         }
 
-        model: ListModel {
-            id: list_model
-            ListElement {
-                name: "HS1"
-                address: "AD1sthrthsthsehserhhrthsthsehserhe"
-                age: "1"
-            }
-            ListElement {
-                name: "HS2"
-                address: "AD2shtrsjhtykyhrthsthsehserhuksthe"
-                age: "2"
-            }
-            ListElement {
-                name: "HS3"
-                address: "AD3erhsthtrhsrthrthsthsehserhhshsr"
-                age: "3"
-            }
-            ListElement {
-                name: "HS4"
-                address: "AD4sehtrsjrjsthahrthsthsehserhehaaw"
-                age: "4"
-            }
-        }
+        model: CTRL.getLength()
 
         delegate: Rectangle {
             width: 350
-            height: 90
+            height: 100
             radius: 20
             border.color: "black"
 
@@ -62,20 +42,23 @@ Item {
                 anchors.fill: parent
                 onPressed: parent.scale = 0.95
                 onReleased: parent.scale = 1
-                onClicked: popup.visible = true
+                onClicked: {
+                    popup.visible = true
+                    currentIndex = index
+                }
             }
 
             Column {
                 Text {
-                    text: '<b>Name:</b> ' + name
+                    text: '<b>Name:</b> ' + CTRL.getData(index).name
                     font.pixelSize: 15
                 }
                 Text {
-                    text: '<b>Address:</b> ' + address
+                    text: '<b>Color:</b> ' + CTRL.getData(index).color
                     font.pixelSize: 15
                 }
                 Text {
-                    text: '<b>Age:</b> ' + age
+                    text: '<b>Tuition:</b> ' + CTRL.getData(index).tuition
                     font.pixelSize: 15
                 }
                 anchors {
@@ -84,6 +67,36 @@ Item {
                     leftMargin: 30
                 }
             }
+        }
+    }
+
+    Rectangle {
+        id: newButton
+        width: 70
+        height: 30
+        radius: 15
+        color: "lavender"
+        border.color: "black"
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: parent.bottom
+            bottomMargin: 20
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onPressed: parent.scale = 0.9
+            onReleased: parent.scale = 1
+            onClicked: {
+                popup.visible = !popup.visible
+                CTRL.addSV("D","Green",200000)
+            }
+        }
+
+        Text {
+            anchors.centerIn: parent
+            text: "Thêm"
+            font.pixelSize: 15
         }
     }
 

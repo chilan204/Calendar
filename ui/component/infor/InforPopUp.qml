@@ -12,16 +12,16 @@ Item {
 
     Rectangle {
         id: bg
-        width: 400
-        height: 400
+        width: 300
+        height: 200
         radius: 20
         anchors.centerIn: parent
     }
 
     Rectangle {
         id: delButton
-        width: 70
-        height: 30
+        width: 50
+        height: 25
         radius: 15
         color: "lavender"
         border.color: "black"
@@ -47,15 +47,15 @@ Item {
 
     Rectangle {
         id: saveButton
-        width: 70
-        height: 30
+        width: 50
+        height: 25
         radius: 15
         color: "lavender"
         border.color: "black"
         anchors {
             verticalCenter: delButton.verticalCenter
             left: delButton.right
-            leftMargin: 50
+            leftMargin: 30
         }
 
         MouseArea {
@@ -74,15 +74,15 @@ Item {
     }
 
     Rectangle {
-        width: 70
-        height: 30
+        width: 50
+        height: 25
         radius: 15
         color: "#C0C0C0"
         border.color: "black"
         anchors {
             verticalCenter: delButton.verticalCenter
             right: delButton.left
-            rightMargin: 50
+            rightMargin: 30
         }
 
         MouseArea {
@@ -96,6 +96,26 @@ Item {
             anchors.centerIn: parent
             text: "Hủy"
             font.pixelSize: 15
+        }
+    }
+
+    Column {
+        Text {
+            text: '<b>Name:</b> ' + CTRL.getData(currentIndex).name
+            font.pixelSize: 25
+        }
+        Text {
+            text: '<b>Color:</b> ' + CTRL.getData(currentIndex).color
+            font.pixelSize: 25
+        }
+        Text {
+            text: '<b>Tuition:</b> ' + CTRL.getData(currentIndex).tuition
+            font.pixelSize: 25
+        }
+        anchors {
+            horizontalCenter: bg.horizontalCenter
+            top: bg.top
+            topMargin: 30
         }
     }
 }

@@ -1,0 +1,59 @@
+{
+    "sinhvien": [
+        {
+            "Color": "Red",
+            "Name": "A",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Yellow",
+            "Name": "B",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Blue",
+            "Name": "C",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Green",
+            "Name": "A",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Green",
+            "Name": "A",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Green",
+            "Name": "A",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Green",
+            "Name": "A",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Green",
+            "Name": "A",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Green",
+            "Name": "A",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Green",
+            "Name": "A",
+            "Tuition": 200000
+        },
+        {
+            "Color": "Green",
+            "Name": "A",
+            "Tuition": 200000
+        }
+    ]
+}
