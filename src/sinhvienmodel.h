@@ -41,13 +41,15 @@ public:
     void append(QString addname, QString addcolor, int addtuition);
     void clear();
 
-    Q_INVOKABLE void add(QString addname, QString addcolor, QString tuition);
+    Q_INVOKABLE void save(QString addname, QString addcolor, QString tuition);
+    Q_INVOKABLE void del(int index);
 
 protected:
     QHash<int, QByteArray> roleNames() const override;
 private:
     QList<SinhVien> m_listSinhVien;
     QJsonObject m_data;
+    bool saveIndex = true;
 };
 
 #endif // SINHVIENMODEL_H

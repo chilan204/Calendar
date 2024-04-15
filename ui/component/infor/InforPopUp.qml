@@ -84,7 +84,10 @@ Item {
             anchors.fill: parent
             onPressed: parent.scale = 0.9
             onReleased: parent.scale = 1
-            onClicked: root.visible = false
+            onClicked: {
+                root.visible = false
+                SV_MODEL.del(listIndex)
+            }
         }
 
         Text {
@@ -113,7 +116,7 @@ Item {
             onReleased: parent.scale = 1
             onClicked: {
                 root.visible = false
-                SV_MODEL.add(repeater.itemAt(0).textInput, repeater.itemAt(1).textInput, repeater.itemAt(2).textInput)
+                SV_MODEL.save(repeater.itemAt(0).textInput, repeater.itemAt(1).textInput, repeater.itemAt(2).textInput)
             }
         }
 
@@ -154,6 +157,6 @@ Item {
     function init(name, color, tuition) {
         root.name = name
         root.color = color
-       root.tuition = tuition
+        root.tuition = tuition
     }
 }
