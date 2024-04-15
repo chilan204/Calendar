@@ -7,6 +7,8 @@ Item {
     property string name
     property string color
     property string tuition
+    property int index
+    property bool isAdd
 
     Rectangle {
         anchors.fill: parent
@@ -86,7 +88,7 @@ Item {
             onReleased: parent.scale = 1
             onClicked: {
                 root.visible = false
-                SV_MODEL.del(listIndex)
+                SV_MODEL.removeItem(root.index)
             }
         }
 
@@ -116,7 +118,8 @@ Item {
             onReleased: parent.scale = 1
             onClicked: {
                 root.visible = false
-                SV_MODEL.save(repeater.itemAt(0).textInput, repeater.itemAt(1).textInput, repeater.itemAt(2).textInput)
+                root.isAdd ? SV_MODEL.add(repeater.itemAt(0).textInput, repeater.itemAt(1).textInput, repeater.itemAt(2).textInput)
+                       : SV_MODEL.modifyItem(repeater.itemAt(0).textInput, repeater.itemAt(1).textInput, repeater.itemAt(2).textInput, root.index)
             }
         }
 
@@ -154,9 +157,11 @@ Item {
         }
     }
 
-    function init(name, color, tuition) {
+    function init(name, color, tuition, isAdd, index) {
         root.name = name
         root.color = color
         root.tuition = tuition
+        root.isAdd = isAdd
+        root.index = index
     }
 }

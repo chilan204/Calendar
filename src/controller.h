@@ -18,6 +18,10 @@ public:
      void initialize();
 
      SinhVienModel *svModel();
+
+signals:
+     void showNotifyPopUp(QString msg);
+
 private:
     explicit Controller(QObject *parent = nullptr);
     SinhVienModel m_svModel;

@@ -5,8 +5,6 @@ Item {
     id: root
     anchors.fill: parent
 
-    property int listIndex
-
     Text {
         id: title
         text: qsTr("Thông tin học sinh")
@@ -44,8 +42,7 @@ Item {
                 onReleased: parent.scale = 1
                 onClicked: {
                     popup.visible = true
-                    popup.init(model.name, model.color, model.tuition)
-                    listIndex = index
+                    popup.init(model.name, model.color, model.tuition, false, index)
                 }
             }
 
@@ -90,7 +87,7 @@ Item {
             onReleased: parent.scale = 1
             onClicked: {
                 popup.visible = true
-                popup.init("", "", "")
+                popup.init("", "", "", true, 0)
             }
         }
 

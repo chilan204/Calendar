@@ -39,15 +39,18 @@ void SinhVienModel::readDatafromJson()
         return;
     }
 
-    QByteArray jsonData = file.readAll();
+    QByteArray data = file.readAll();
+    qDebug() << "text: " << data;
     file.close();
 
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
-    if (jsonDoc.isNull()) {
+    QJsonDocument jsonData = QJsonDocument::fromJson(data);
+    qDebug() << "DOC: " << jsonData;
+    if (jsonData.isNull()) {
         qDebug() << "Không thể phân tích JSON";
     }
 
-    m_data = jsonDoc.object();
+    m_data = jsonData.object();
+    qDebug() << "OBJ: " << m_data;
 
     QJsonArray svArray = m_data["sinhvien"].toArray();
 
@@ -68,6 +71,21 @@ void SinhVienModel::append(QString addname, QString addcolor, int addtuition)
     endInsertRows();
 }
 
+void SinhVienModel::modify(QString addname, QString addcolor, int addtuition, int index)
+{
+    SinhVien item(addname, addcolor, addtuition);
+    beginResetModel();
+    m_listSinhVien.replace(index, item);
+    endResetModel();
+}
+
+void SinhVienModel::remove(int index)
+{
+    beginRemoveRows(QModelIndex(), index, index);
+    m_listSinhVien.removeAt(index);
+    endRemoveRows();
+}
+
 void SinhVienModel::clear()
 {
     beginResetModel();
@@ -75,39 +93,23 @@ void SinhVienModel::clear()
     endResetModel();
 }
 
-void SinhVienModel::save(QString addname, QString addcolor, QString tuition)
+void SinhVienModel::add(QString addname, QString addcolor, QString tuition)
 {
-    append(addname, addcolor, tuition.toInt());
+    foreach (SinhVien item, m_listSinhVien) {
+        if (addcolor == item.color) {
+            emit showNotifyPopUp("Màu đã được sử dụng!");
+            return;
+        }
+    };
 
     QJsonObject sinhvien;
     sinhvien["Name"] = addname;
     sinhvien["Color"] = addcolor;
     sinhvien["Tuition"] = tuition.toInt();
 
-    for (int i = 0; i < m_listSinhVien.length(); i++) {
-        if (addcolor == m_listSinhVien[i].color) saveIndex = false;
-    };
-
-    if (saveIndex) {
-        QJsonArray arr = m_data["sinhvien"].toArray();
-        arr.append(sinhvien);
-        m_data["sinhvien"]= arr;
-
-        QJsonDocument jsonDoc(m_data);
-
-        QFile file(PATH_DATA);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            qDebug() << "Không thể mở tệp JSON";
-            return;
-        }
-        file.write(jsonDoc.toJson());
-        file.close();
-    }
-}
-
-void SinhVienModel::del(int index)
-{
-    m_data.removeAt(index);
+    QJsonArray arr = m_data["sinhvien"].toArray();
+    arr.append(sinhvien);
+    m_data["sinhvien"]= arr;
 
     QJsonDocument jsonDoc(m_data);
 
@@ -119,6 +121,57 @@ void SinhVienModel::del(int index)
     file.write(jsonDoc.toJson());
     file.close();
 
+    append(addname, addcolor, tuition.toInt());
+}
+
+void SinhVienModel::modifyItem(QString addname, QString addcolor, QString addtuition, int index)
+{
+    foreach (SinhVien item, m_listSinhVien) {
+        if ( addcolor != m_listSinhVien[index].color && addcolor == item.color ) {
+            emit showNotifyPopUp("Màu đã được sử dụng!");
+            return;
+        }
+    };
+
+    QJsonObject sinhvien;
+    sinhvien["Name"] = addname;
+    sinhvien["Color"] = addcolor;
+    sinhvien["Tuition"] = addtuition.toInt();
+
+    QJsonArray arr = m_data["sinhvien"].toArray();
+    arr[index] = sinhvien;
+    m_data["sinhvien"]= arr;
+
+    QJsonDocument jsonDoc(m_data);
+
+    QFile file(PATH_DATA);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "Không thể mở tệp JSON";
+        return;
+    }
+    file.write(jsonDoc.toJson());
+    file.close();
+
+    modify(addname, addcolor, addtuition.toInt(), index);
+}
+
+void SinhVienModel::removeItem(int index)
+{
+    remove(index);
+
+    QJsonArray arr = m_data["sinhvien"].toArray();
+    arr.removeAt(index);
+    m_data["sinhvien"]= arr;
+
+    QJsonDocument jsonDoc(m_data);
+
+    QFile file(PATH_DATA);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "Không thể mở tệp JSON";
+        return;
+    }
+    file.write(jsonDoc.toJson());
+    file.close();
 }
 
 QHash<int, QByteArray> SinhVienModel::roleNames() const

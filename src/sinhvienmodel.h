@@ -39,10 +39,16 @@ public:
 
     void readDatafromJson();
     void append(QString addname, QString addcolor, int addtuition);
+    void modify(QString addname, QString addcolor, int addtuition, int index);
+    void remove(int index);
     void clear();
 
-    Q_INVOKABLE void save(QString addname, QString addcolor, QString tuition);
-    Q_INVOKABLE void del(int index);
+    Q_INVOKABLE void add(QString addname, QString addcolor, QString tuition);
+    Q_INVOKABLE void modifyItem(QString addname, QString addcolor, QString addtuition, int index);
+    Q_INVOKABLE void removeItem(int index);
+
+signals:
+    void showNotifyPopUp(QString msg);
 
 protected:
     QHash<int, QByteArray> roleNames() const override;

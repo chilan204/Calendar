@@ -17,5 +17,6 @@
         <file>ui/component/taskbar/TaskbarItem.qml</file>
         <file>ui/component/home/HomePopUp.qml</file>
         <file>ui/component/infor/InforPopUp.qml</file>
+        <file>ui/component/NotifyPopUp.qml</file>
     </qresource>
 </RCC>

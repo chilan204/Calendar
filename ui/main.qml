@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import "component/taskbar"
+import "component"
 
 Window {
     id: root
@@ -24,4 +25,6 @@ Window {
             horizontalCenter: parent.horizontalCenter
         }
     }
+
+    NotifyPopUp{}
 }

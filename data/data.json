@@ -3,17 +3,19 @@
         {
             "Color": "Red",
             "Name": "A",
-            "Tuition": 200000
+            "Tuition": 20
         },
         {
-            "Color": "Yellow",
-            "Name": "B",
-            "Tuition": 200000
+            "Color": "greenn",
+            "Name": "Cc",
+            "Tuition": 20
         },
         {
-            "Color": "Blue",
-            "Name": "C",
-            "Tuition": 200000
+            "Color": "t",
+            "Name": "tungg",
+            "Tuition": 1
         }
-    ]
+    ],
+
+	"ngay": ["22/3", "30/3"]
 }

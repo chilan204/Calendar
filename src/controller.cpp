@@ -3,6 +3,7 @@
 Controller::Controller(QObject *parent) : QObject(parent)
 {
     initialize();
+    connect(&m_svModel, &SinhVienModel::showNotifyPopUp, this, &Controller::showNotifyPopUp);
 }
 
 Controller *Controller::getInstance()
