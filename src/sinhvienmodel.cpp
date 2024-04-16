@@ -40,17 +40,14 @@ void SinhVienModel::readDatafromJson()
     }
 
     QByteArray data = file.readAll();
-    qDebug() << "text: " << data;
     file.close();
 
     QJsonDocument jsonData = QJsonDocument::fromJson(data);
-    qDebug() << "DOC: " << jsonData;
     if (jsonData.isNull()) {
         qDebug() << "Không thể phân tích JSON";
     }
 
     m_data = jsonData.object();
-    qDebug() << "OBJ: " << m_data;
 
     QJsonArray svArray = m_data["sinhvien"].toArray();
 

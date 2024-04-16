@@ -15,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         src/controller.cpp \
+        src/daymodel.cpp \
         src/main.cpp \
         src/sinhvienmodel.cpp
 
@@ -34,5 +35,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     src/appenum.h \
     src/controller.h \
+    src/daymodel.h \
     src/define.h \
     src/sinhvienmodel.h

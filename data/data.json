@@ -1,4 +1,12 @@
 {
+    "ngay": [
+        "22 / 3",
+        "30 / 3",
+        "23",
+        "17",
+        "9",
+        "18"
+    ],
     "sinhvien": [
         {
             "Color": "Red",
@@ -6,16 +14,14 @@
             "Tuition": 20
         },
         {
-            "Color": "greenn",
-            "Name": "Cc",
+            "Color": "Blue",
+            "Name": "B",
             "Tuition": 20
         },
         {
-            "Color": "t",
-            "Name": "tungg",
-            "Tuition": 1
+            "Color": "Yellow",
+            "Name": "C",
+            "Tuition": 20
         }
-    ],
-
-	"ngay": ["22/3", "30/3"]
+    ]
 }

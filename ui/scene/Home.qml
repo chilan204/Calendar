@@ -19,15 +19,18 @@ Item {
                     anchors.fill: parent
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: popup.visible = true
-                    }
-
-                    Row {
-                        Repeater {
-                            model: ["red","blue","yellow"]
-                            Rectangle { width: dayBox.width/3; height: dayBox.height; color: modelData }
+                        onClicked: {
+                            popup.visible = true
+                            DAY_MODEL.addItem(styleData.date.getDate(),"/",styleData.date.getMonth())
                         }
                     }
+
+//                    Row {
+//                        Repeater {
+//                            model: ["red","blue","yellow"]
+//                            Rectangle { width: dayBox.width/3; height: dayBox.height; color: modelData }
+//                        }
+//                    }
                 }
                 Label {
                     id: dayDelegateText

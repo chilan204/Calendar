@@ -21,3 +21,8 @@ SinhVienModel *Controller::svModel()
 {
     return &m_svModel;
 }
+
+DayModel *Controller::dayModel()
+{
+    return &m_dayModel;
+}
