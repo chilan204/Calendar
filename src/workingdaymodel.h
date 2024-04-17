@@ -18,17 +18,13 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
-    void readDatafromJson();
+    void initialize(QJsonArray arr);
     void append(QString addday);
     void remove(QString removeday);
     void clear();
 
-    Q_INVOKABLE void addItem(QString addday);
-    Q_INVOKABLE void removeItem(QString removeday);
-
 private:
     QList <QString> m_listDay;
-    QJsonObject m_data;
 };
 
-#endif // SINHVIENMODEL_H
+#endif // WORKINGDAYMODEL_H

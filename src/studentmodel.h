@@ -1,5 +1,5 @@
-#ifndef SINHVIENMODEL_H
-#define SINHVIENMODEL_H
+#ifndef STUDENTMODEL_H
+#define STUDENTMODEL_H
 
 #include <QAbstractListModel>
 #include <QFile>
@@ -9,26 +9,26 @@
 #include <QDebug>
 #include "define.h"
 
-struct SinhVien {
+struct Student {
     QString name;
     QString color;
     int tuition;
 
-    SinhVien(){};
-    SinhVien(QString addname, QString addcolor, int addtuition){
+    Student(){};
+    Student(QString addname, QString addcolor, int addtuition){
         name = addname;
         color = addcolor;
         tuition = addtuition;
     };
 };
 
-class SinhVienModel : public QAbstractListModel
+class StudentModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit SinhVienModel(QObject *parent = nullptr);
+    explicit StudentModel(QObject *parent = nullptr);
 
-    enum SinhVienRoles {
+    enum StudentRoles {
         NameRole = Qt::UserRole + 1,
         ColorRole,
         TuitionRole
@@ -37,15 +37,11 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
-    void readDatafromJson();
+    void initialize(QJsonArray arr);
     void append(QString addname, QString addcolor, int addtuition);
     void modify(QString addname, QString addcolor, int addtuition, int index);
     void remove(int index);
     void clear();
-
-    Q_INVOKABLE void add(QString addname, QString addcolor, QString tuition);
-    Q_INVOKABLE void modifyItem(QString addname, QString addcolor, QString addtuition, int index);
-    Q_INVOKABLE void removeItem(int index);
 
 signals:
     void showNotifyPopUp(QString msg);
@@ -53,9 +49,7 @@ signals:
 protected:
     QHash<int, QByteArray> roleNames() const override;
 private:
-    QList<SinhVien> m_listSinhVien;
-    QJsonObject m_data;
-    bool saveIndex = true;
+    QList <Student> m_listStudent;
 };
 
-#endif // SINHVIENMODEL_H
+#endif // STUDENTMODEL_H

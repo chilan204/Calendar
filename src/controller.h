@@ -7,8 +7,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include "define.h"
-#include "sinhvienmodel.h"
-#include "daymodel.h"
+#include "studentmodel.h"
+#include "workingdaymodel.h"
 
 class Controller : public QObject
 {
@@ -17,16 +17,26 @@ class Controller : public QObject
 public:
     static Controller *getInstance();
     void initialize();
+    void readStudentfromJson();
+    void readWorkingDayfromJson();
 
-    SinhVienModel *svModel();
+    StudentModel *svModel();
     DayModel *dayModel();
+
+    Q_INVOKABLE void addStudent(QString addname, QString addcolor, QString tuition);
+    Q_INVOKABLE void modifyStudent(QString addname, QString addcolor, QString addtuition, int index);
+    Q_INVOKABLE void removeStudent(int index);
+    Q_INVOKABLE void addWorkingday(QString day, QString month, QString year);
+    Q_INVOKABLE void removeWorkingday(QString removeday);
+
 signals:
      void showNotifyPopUp(QString msg);
 
 private:
     explicit Controller(QObject *parent = nullptr);
-    SinhVienModel m_svModel;
+    StudentModel m_svModel;
     DayModel m_dayModel;
+    QJsonObject m_data;
 };
 
 #endif // CONTROLLER_H

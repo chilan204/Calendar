@@ -20,8 +20,9 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            popup.visible = true
-                            DAY_MODEL.addItem(styleData.date.getDate(),"/",styleData.date.getMonth())
+//                            popup.visible = true
+//                            CTRL.addWorkingday(styleData.date.getDate(), styleData.date.getMonth(), styleData.date.getYear())
+                            console.log(Qt.formatDateTime(styleData.date, "dd/MM/yy"))
                         }
                     }
 
