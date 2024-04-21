@@ -4,9 +4,6 @@ Item {
     id: root
     anchors.fill: parent
 
-    property string name
-    property string color
-    property string tuition
     property int index
     property bool isAdd
 
@@ -52,7 +49,6 @@ Item {
                     font.pixelSize: 15
                     width: 200
                     clip: true
-                    text: (index == 0 ? root.name : (index == 1 ? root.color : root.tuition))
                 }
                 Text {
                     anchors {
@@ -88,7 +84,7 @@ Item {
             onReleased: parent.scale = 1
             onClicked: {
                 root.visible = false
-                SV_MODEL.removeItem(root.index)
+                CTRL.removeStudent(root.index)
             }
         }
 
@@ -118,8 +114,8 @@ Item {
             onReleased: parent.scale = 1
             onClicked: {
                 root.visible = false
-                root.isAdd ? SV_MODEL.add(repeater.itemAt(0).textInput, repeater.itemAt(1).textInput, repeater.itemAt(2).textInput)
-                       : SV_MODEL.modifyItem(repeater.itemAt(0).textInput, repeater.itemAt(1).textInput, repeater.itemAt(2).textInput, root.index)
+                root.isAdd ? CTRL.addStudent(repeater.itemAt(0).textInput, repeater.itemAt(1).textInput, repeater.itemAt(2).textInput)
+                       : CTRL.modifyStudent(repeater.itemAt(0).textInput, repeater.itemAt(1).textInput, repeater.itemAt(2).textInput, root.index)
             }
         }
 
@@ -158,9 +154,9 @@ Item {
     }
 
     function init(name, color, tuition, isAdd, index) {
-        root.name = name
-        root.color = color
-        root.tuition = tuition
+        repeater.itemAt(0).textInput = name
+        repeater.itemAt(1).textInput = color
+        repeater.itemAt(2).textInput = tuition
         root.isAdd = isAdd
         root.index = index
     }

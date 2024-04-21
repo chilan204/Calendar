@@ -14,7 +14,7 @@ Controller *Controller::getInstance()
 
 void Controller::initialize()
 {
-
+    readDatafromJson();
 }
 
 StudentModel *Controller::svModel()
@@ -27,7 +27,7 @@ DayModel *Controller::dayModel()
     return &m_dayModel;
 }
 
-void Controller::readStudentfromJson()
+void Controller::readDatafromJson()
 {
     QFile file(PATH_DATA);
 
@@ -47,37 +47,26 @@ void Controller::readStudentfromJson()
     m_data = jsonData.object();
 
     m_svModel.initialize(m_data["student"].toArray());
+    m_dayModel.initialize(m_data["workingDay"].toArray());
 }
 
-void Controller::readWorkingDayfromJson()
+void Controller::writeDatafromJson()
 {
-    QFile file(PATH_DATA);
+    QJsonDocument jsonDoc(m_data);
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QFile file(PATH_DATA);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qDebug() << "Không thể mở tệp JSON";
         return;
     }
-
-    QByteArray data = file.readAll();
+    file.write(jsonDoc.toJson());
     file.close();
-
-    QJsonDocument jsonData = QJsonDocument::fromJson(data);
-    if (jsonData.isNull()) {
-        qDebug() << "Không thể phân tích JSON";
-    }
-
-    m_data = jsonData.object();
-
-    QJsonArray svArray = m_data["ngay"].toArray();
-    qDebug() << svArray;
-
-    m_dayModel.initialize(m_data["ngay"].toArray());
 }
 
 void Controller::addStudent(QString addname, QString addcolor, QString tuition)
 {
     foreach (QJsonValue item, m_data["student"].toArray()) {
-        if (addcolor == item.toObject()["color"].toString()) {
+        if (addcolor.toLower() == item.toObject()["Color"].toString().toLower()) {
             emit showNotifyPopUp("Màu đã được sử dụng!");
             return;
         }
@@ -85,30 +74,22 @@ void Controller::addStudent(QString addname, QString addcolor, QString tuition)
 
     QJsonObject student;
     student["Name"] = addname;
-    student["Color"] = addcolor;
+    student["Color"] = addcolor.toLower();
     student["Tuition"] = tuition.toInt();
 
     QJsonArray arr = m_data["student"].toArray();
     arr.append(student);
     m_data["student"]= arr;
 
-    QJsonDocument jsonDoc(m_data);
-
-    QFile file(PATH_DATA);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "Không thể mở tệp JSON";
-        return;
-    }
-    file.write(jsonDoc.toJson());
-    file.close();
-
+    writeDatafromJson();
     m_svModel.append(addname, addcolor, tuition.toInt());
 }
 
 void Controller::modifyStudent(QString addname, QString addcolor, QString addtuition, int index)
 {
     foreach (QJsonValue item, m_data["student"].toArray()) {
-        if ( addcolor !=item.toObject()["color"].toString() && addcolor == item.toObject()["color"].toString() ) {
+        if (addcolor.toLower() != m_data["student"].toArray()[index].toObject()["Color"].toString().toLower() &&
+                addcolor.toLower() == item.toObject()["Color"].toString().toLower()){
             emit showNotifyPopUp("Màu đã được sử dụng!");
             return;
         }
@@ -116,23 +97,14 @@ void Controller::modifyStudent(QString addname, QString addcolor, QString addtui
 
     QJsonObject student;
     student["Name"] = addname;
-    student["Color"] = addcolor;
+    student["Color"] = addcolor.toLower();
     student["Tuition"] = addtuition.toInt();
 
     QJsonArray arr = m_data["student"].toArray();
     arr[index] = student;
     m_data["student"]= arr;
 
-    QJsonDocument jsonDoc(m_data);
-
-    QFile file(PATH_DATA);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "Không thể mở tệp JSON";
-        return;
-    }
-    file.write(jsonDoc.toJson());
-    file.close();
-
+    writeDatafromJson();
     m_svModel.modify(addname, addcolor, addtuition.toInt(), index);
 }
 
@@ -142,54 +114,51 @@ void Controller::removeStudent(int index)
     arr.removeAt(index);
     m_data["student"]= arr;
 
-    QJsonDocument jsonDoc(m_data);
-
-    QFile file(PATH_DATA);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "Không thể mở tệp JSON";
-        return;
-    }
-    file.write(jsonDoc.toJson());
-    file.close();
-
+    writeDatafromJson();
     m_svModel.remove(index);
 }
 
-void Controller::addWorkingday(QString day, QString month, QString year)
+void Controller::modifyWorkingday(QDate workingday, QList<int> listcolor)
 {
-    QString str = year.remove(0,1) + month + day;
-    QJsonArray arr = m_data["ngay"].toArray();
-    arr.append(str);
-    m_data["ngay"]= arr;
+    QString year = QString::number(workingday.year());
+    QString month = QString::number(workingday.month());
+    QJsonObject obj = m_data["workingDay"].toObject();
+    QJsonObject objYear = obj[year].toObject();
+    QJsonArray arrMonth = objYear[month].toArray();
 
-    QJsonDocument jsonDoc(m_data);
+    if(arrMonth.isEmpty())
+        for (int i = 0; i < 4; i++) { //fix
+            QJsonArray arr;
+            arrMonth.append(arr);
+        }
 
-    QFile file(PATH_DATA);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "Không thể mở tệp JSON";
-        return;
+    for(int i = 0; i < 4; i++) {
+        bool check = false;
+
+        foreach(int j, listcolor) {
+            if(i == j) {
+                check = true;
+                break;
+            }
+        }
+
+        if(check) {
+                QJsonArray arr = arrMonth[i].toArray();
+                if(!arr.contains(workingday.day())) {
+                    arr.append(workingday.day());
+                    arrMonth[i] = arr;
+                }
+        } else {
+            for(int j = 0; j < arrMonth[i].toArray().size(); j++)
+                if(arrMonth[i].toArray()[j].toInt() == workingday.day())
+                    arrMonth[i].toArray().removeAt(j);
+        }
     }
-    file.write(jsonDoc.toJson());
-    file.close();
 
-    m_dayModel.append(str);
-}
+    objYear[month] = arrMonth;
+    obj[year] = objYear;
+    m_data["workingDay"] = obj;
 
-void Controller::removeWorkingday(QString removeday)
-{
-    //    remove(index);
-
-    //    QJsonArray arr = m_data["student"].toArray();
-    //    arr.removeAt(index);
-    //    m_data["student"]= arr;
-
-    //    QJsonDocument jsonDoc(m_data);
-
-    //    QFile file(PATH_DATA);
-    //    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    //        qDebug() << "Không thể mở tệp JSON";
-    //        return;
-    //    }
-    //    file.write(jsonDoc.toJson());
-    //    file.close();
+    writeDatafromJson();
+    //m_dayModel.append(workingday);
 }

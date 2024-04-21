@@ -20,19 +20,20 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-//                            popup.visible = true
-//                            CTRL.addWorkingday(styleData.date.getDate(), styleData.date.getMonth(), styleData.date.getYear())
-                            console.log(Qt.formatDateTime(styleData.date, "dd/MM/yy"))
+                            popup.visible = true
+                            popup.date = styleData.date
                         }
                     }
 
 //                    Row {
 //                        Repeater {
-//                            model: ["red","blue","yellow"]
-//                            Rectangle { width: dayBox.width/3; height: dayBox.height; color: modelData }
+//                            model: SV_MODEL
+//                            //fix
+//                            Rectangle { width: dayBox.width/4; height: dayBox.height; color: model.color}
 //                        }
 //                    }
                 }
+
                 Label {
                     id: dayDelegateText
                     text: styleData.date.getDate()

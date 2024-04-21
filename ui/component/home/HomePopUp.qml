@@ -4,6 +4,9 @@ Item {
     id: root
     anchors.fill: parent
 
+    property var date
+    property var listIndex
+
     Rectangle {
         anchors.fill: parent
         color: "black"
@@ -19,62 +22,47 @@ Item {
     }
 
     ListView {
-        id: listcolor
-        width: list_model.count > 2 ? 280 : list_model.count * 80 + (list_model.count - 1) * 20
-        height: 150
+        id: listColor
+        width: 280
+        height: 125
+        clip: true
+        spacing: 20
+        orientation: ListView.Horizontal
         anchors {
             horizontalCenter: bg.horizontalCenter
             top: bg.top
             topMargin: 20
         }
 
-        clip: true
-        interactive: list_model.count > 3
-        orientation: ListView.Horizontal
-        spacing: 20
+        model: SV_MODEL
 
-        model: ListModel {
-            id: list_model
-            ListElement {
-                color: "red"
-                name: "HS1"
-            }
-            ListElement {
-                color: "blue"
-                name: "HS2"
-            }
-            ListElement {
-                color: "yellow"
-                name: "HS3"
-            }
-            ListElement {
-                color: "green"
-                name: "HS4"
-            }
-        }
-
-        delegate: Rectangle {
+        delegate: Item {
+            id: delegateItem
             width: 80
-            height: 80
-            radius: 80
-            opacity: 0.5
-            border.color: "black"
-            color: model.color
+            height: 125
+            property bool isCheck: false
+            Rectangle {
+                width: 80
+                height: 80
+                radius: 80
+                opacity: parent.isCheck ? 1 : 0.2
+                color: model.color
+                border.color: "black"
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: parent.opacity = (parent.opacity == 1 ? 0.5 : 1)
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: delegateItem.isCheck = !delegateItem.isCheck
+                }
             }
 
             Text {
-                anchors {
-                    horizontalCenter: parent.horizontalCenter
-                    top: parent.bottom
-                    topMargin: 10
-                }
                 text: model.name
                 font.pixelSize: 15
-                color: "black"
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    bottom: parent.bottom
+                    bottomMargin: 20
+                }
             }
         }
     }
@@ -97,7 +85,16 @@ Item {
             anchors.fill: parent
             onPressed: parent.scale = 0.8
             onReleased: parent.scale = 1
-            onClicked: root.visible = false
+            onClicked: {
+                root.listIndex = []
+                for(var i = 0; i < 4; i++) {
+                    if(listColor.itemAtIndex(i).isCheck){
+                        root.listIndex.push(i)
+                    }
+                }
+                CTRL.modifyWorkingday(date, root.listIndex)
+                root.visible = false
+            }
         }
 
         Text {
