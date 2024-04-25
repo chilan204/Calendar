@@ -29,6 +29,7 @@ public:
     Q_INVOKABLE void removeStudent(int index);
 
     Q_INVOKABLE void modifyWorkingday(QDate workingday, QList<int> listcolor);
+    Q_INVOKABLE QList<QString> getListColorDate(QDate workingday);
 
 signals:
      void showNotifyPopUp(QString msg);

@@ -7,8 +7,6 @@ Item {
     id: root
     anchors.fill: parent
 
-
-
     Calendar {
         id: calendar
         anchors.fill: parent
@@ -16,6 +14,7 @@ Item {
             dayDelegate: Item {
                 Item {
                     id: dayBox
+                    property var listColorDate : CTRL.getListColorDate(styleData.date)
                     anchors.fill: parent
                     MouseArea {
                         anchors.fill: parent
@@ -25,13 +24,13 @@ Item {
                         }
                     }
 
-//                    Row {
-//                        Repeater {
-//                            model: SV_MODEL
-//                            //fix
-//                            Rectangle { width: dayBox.width/4; height: dayBox.height; color: model.color}
-//                        }
-//                    }
+                    Row {
+                        Repeater {
+                            model: dayBox.listColorDate.count
+                            Rectangle { width: dayBox.width/listColorDate.count;
+                                height: dayBox.height; color: dayBox.listColorDate[index]}
+                        }
+                    }
                 }
 
                 Label {

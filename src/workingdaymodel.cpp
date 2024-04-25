@@ -45,13 +45,6 @@ void DayModel::append(QString addday)
     endInsertRows();
 }
 
-void DayModel::remove(QString removeday)
-{
-//    beginRemoveRows(QModelIndex(), index, index);
-//    m_listDay.removeAt(index);
-//    endRemoveRows();
-}
-
 void DayModel::clear()
 {
     beginResetModel();

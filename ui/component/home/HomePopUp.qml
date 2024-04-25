@@ -87,7 +87,7 @@ Item {
             onReleased: parent.scale = 1
             onClicked: {
                 root.listIndex = []
-                for(var i = 0; i < 4; i++) {
+                for(var i = 0; i < listColor.count; i++) {
                     if(listColor.itemAtIndex(i).isCheck){
                         root.listIndex.push(i)
                     }
