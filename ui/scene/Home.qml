@@ -14,7 +14,6 @@ Item {
             dayDelegate: Item {
                 Item {
                     id: dayBox
-                    property var listColorDate : CTRL.getListColorDate(styleData.date)
                     anchors.fill: parent
                     MouseArea {
                         anchors.fill: parent
@@ -26,9 +25,25 @@ Item {
 
                     Row {
                         Repeater {
-                            model: dayBox.listColorDate.count
-                            Rectangle { width: dayBox.width/listColorDate.count;
-                                height: dayBox.height; color: dayBox.listColorDate[index]}
+                            id: repeater
+                            model: CTRL.getListColorDate(styleData.date).length
+                            Rectangle {
+                                width: dayBox.width/repeater.model
+                                height: dayBox.height
+                                color: CTRL.getListColorDate(styleData.date)[index]
+                            }
+                        }
+                        Connections{
+                            target: CTRL
+                            function onWorkingdayChanged(workingday){
+                                if(Qt.formatDateTime(styleData.date, "yyMMdd") ===
+                                        Qt.formatDateTime(workingday, "yyMMdd")) {
+                                    repeater.model = CTRL.getListColorDate(styleData.date).length
+                                    for(var i = 0; i < CTRL.getListColorDate(styleData.date).length; i++) {
+                                        repeater.itemAt(i).color = CTRL.getListColorDate(styleData.date)[i]
+                                    }
+                                }
+                            }
                         }
                     }
                 }

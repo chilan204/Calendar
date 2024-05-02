@@ -41,12 +41,13 @@ Item {
             width: 80
             height: 125
             property bool isCheck: false
+            property string color: model.color
             Rectangle {
                 width: 80
                 height: 80
                 radius: 80
                 opacity: parent.isCheck ? 1 : 0.2
-                color: model.color
+                color: delegateItem.color
                 border.color: "black"
 
                 MouseArea {
@@ -128,6 +129,20 @@ Item {
             anchors.centerIn: parent
             text: "Hủy"
             font.pixelSize: 15
+        }
+    }
+
+    onDateChanged: {
+        for(var j = 0; j < listColor.count; j++) {
+            listColor.itemAtIndex(j).isCheck = false
+        }
+
+        for(j = 0; j < listColor.count; j++) {
+            for(var i = 0; i < CTRL.getListColorDate(root.date).length; i++) {
+                if(listColor.itemAtIndex(j).color === CTRL.getListColorDate(root.date)[i]) {
+                    listColor.itemAtIndex(j).isCheck = true
+                }
+            }
         }
     }
 }

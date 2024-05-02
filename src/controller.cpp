@@ -125,7 +125,6 @@ void Controller::modifyWorkingday(QDate workingday, QList<int> listcolor)
     QJsonObject obj = m_data["workingDay"].toObject();
     QJsonObject objYear = obj[year].toObject();
     QJsonArray arrMonth = objYear[month].toArray();
-    qDebug() << arrMonth;
 
     if(arrMonth.isEmpty())
         for (int i = 0; i < m_data["student"].toArray().size(); i++) {
@@ -163,33 +162,19 @@ void Controller::modifyWorkingday(QDate workingday, QList<int> listcolor)
     m_data["workingDay"] = obj;
 
     writeDatafromJson();
-    //m_dayModel.append(workingday);
+    emit workingdayChanged(workingday);
 }
 
 QList<QString> Controller::getListColorDate(QDate workingday)
 {
-    QString year = QString::number(workingday.year());
-    QString month = QString::number(workingday.month());
-    QString day = QString::number(workingday.day());
-    QJsonObject obj = m_data["workingDay"].toObject();
-    QJsonObject objYear = obj[year].toObject();
-    QJsonArray arrMonth = objYear[month].toArray();
-    QList<QString> arr;
-
-    if(arrMonth.isEmpty())
-        for (int i = 0; i < m_data["student"].toArray().size(); i++) {
-            QJsonArray arr;
-            arrMonth.append(arr);
-        }
+    QJsonArray arr = m_data["workingDay"].toObject()[QString::number(workingday.year())].toObject()
+            [QString::number(workingday.month())].toArray();
+    QList<QString> listColor;
     
-    for(int i = 0; i < m_data["student"].toArray().size(); i++) {
-        foreach(int j, m_data["student"].toArray()[i]) {
-            if(j == day) {
-                arr.push_back(m_data["student"].toArray()[i].toObject()["Color"].toString().toLower());
-                        break;
-            }
+    for(int i = 0; i < arr.size(); i++) {
+        if(arr[i].toArray().contains(workingday.day())) {
+            listColor.append(m_data["student"].toArray()[i].toObject()["Color"].toString());
         }
     }
-    qDebug() << arr;
-    return arr;
+    return listColor;
 }

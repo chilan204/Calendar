@@ -33,6 +33,7 @@ public:
 
 signals:
      void showNotifyPopUp(QString msg);
+     void workingdayChanged(QDate workingday);
 
 private:
     explicit Controller(QObject *parent = nullptr);
