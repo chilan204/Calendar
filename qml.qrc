@@ -18,5 +18,9 @@
         <file>ui/component/home/HomePopUp.qml</file>
         <file>ui/component/infor/InforPopUp.qml</file>
         <file>ui/component/NotifyPopUp.qml</file>
+        <file>ui/component/statistical/StudentItem.qml</file>
+        <file>Icon/Next.png</file>
+        <file>Icon/Previous.png</file>
+        <file>ui/component/statistical/TimeBar.qml</file>
     </qresource>
 </RCC>

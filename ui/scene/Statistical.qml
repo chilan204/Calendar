@@ -1,5 +1,6 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.14
+import "../component/statistical"
 
 Item {
     id: root
@@ -7,7 +8,7 @@ Item {
 
     Text {
         id: title
-        text: qsTr("Bảng thống kê")
+        text: "Bảng thống kê"
         font.pixelSize: 35
         anchors {
             horizontalCenter: parent.horizontalCenter
@@ -16,127 +17,86 @@ Item {
         }
     }
 
-    ListView {
-        id: listmonth
-        width: 480
-        height: 100
+    TimeBar {
+        id: timeBar
+        width: parent.width
+        height: 20
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: title.bottom
             topMargin: 20
         }
+    }
 
-        clip: true
+//    PathView {
+//        id: timeBar
+//        anchors.fill: parent
+//        model: 12
+//        delegate: Rectangle {
+//            width: 80
+//            height: 40
+//            radius: 40
+//            border.color: "black"
+//            opacity: PathView.isCurrentItem ? 1 : 0.5
+
+//            Text {
+//                text: "Tháng " + (index + 1)
+//                font.pixelSize: 15
+//                anchors.centerIn: parent
+//            }
+//        }
+//        path: Path {
+//            startX: 250
+//            startY: 100
+//            PathQuad { x: 250; y: 50; controlX: 1000; controlY: 75 }
+//            PathQuad { x: 250; y: 100; controlX: -500; controlY: 75 }
+//        }
+//    }
+
+    Rectangle {
+        id: axisBar
+        width: 375
+        height: 3
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: scrollBar.top
+            bottomMargin: 50
+        }
+        color: "black"
+    }
+
+    ListView {
+        id: liststudent
+        width: 375
+        height: 360
+        spacing: 25
         orientation: ListView.Horizontal
-        spacing: 20
-
-        model: ListModel {
-            id: list_model
-            ListElement {
-                month: "Tháng 1"
-            }
-            ListElement {
-                month: "Tháng 2"
-            }
-            ListElement {
-                month: "Tháng 3"
-            }
-            ListElement {
-                month: "Tháng 4"
-            }
-            ListElement {
-                month: "Tháng 5"
-            }
-            ListElement {
-                month: "Tháng 6"
-            }
-            ListElement {
-                month: "Tháng 7"
-            }
-            ListElement {
-                month: "Tháng 8"
-            }
-            ListElement {
-                month: "Tháng 9"
-            }
-            ListElement {
-                month: "Tháng 10"
-            }
-            ListElement {
-                month: "Tháng 11"
-            }
-            ListElement {
-                month: "Tháng 12"
-            }
+        clip: true
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: axisBar.top
+            bottomMargin: -30
         }
 
-        delegate: Rectangle {
-            width: 80
-            height: 40
-            radius: 20
-            opacity: 0.5
-            border.color: "black"
-
+        model: SV_MODEL
+        delegate: StudentItem {
+            nameStudent: model.name
+            colorStudent: model.color
+//            workingDay: CTRL.getWorkingDay[index]
             MouseArea {
                 anchors.fill: parent
-                onClicked: parent.opacity = (parent.opacity == 1 ? 0.5 : 1)
-            }
-
-            Text {
-                anchors.centerIn: parent
-                text: model.month
-                font.pixelSize: 15
-                color: "black"
             }
         }
     }
 
-    Rectangle {
-        width: parent.width
+    ScrollBar {
+        id: scrollBar
+        width: parent.width - 100
         height: 3
         anchors {
             bottom: parent.bottom
             bottomMargin: 5
         }
-        color: "black"
         opacity: 0.5
     }
-
-
-
-//    ListModel {
-//        id: myModel
-//        ListElement { name: "hs 1"; numberOfLessons: 10; }
-//        ListElement { name: "hs 2"; numberOfLessons: 20; }
-//        ListElement { name: "hs 3"; numberOfLessons: 30; }
-//    }
-
-//    TableView {
-//        width: 500
-//        height: 380
-//        model: myModel
-//        anchors {
-//            horizontalCenter: parent.horizontalCenter
-//            top: selectMonth.bottom
-//            topMargin: 20
-//        }
-
-//        TableViewColumn {
-//            role: "name" // Được đặt tên trong ListModel
-//            title: "Tên"
-//            width: 150
-//        }
-
-//        TableViewColumn {
-//            role: "numberOfLessons"
-//            title: "Số buổi học"
-//            width: 150
-//        }
-
-////        TableViewColumn {
-////            role: "fee"
-////            title: "Số tiền"
-////            width: 150
-////        }
-//    }
 }

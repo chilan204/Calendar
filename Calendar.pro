@@ -16,8 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         src/controller.cpp \
         src/main.cpp \
-        src/studentmodel.cpp \
-        src/workingdaymodel.cpp
+        src/studentmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,5 +35,4 @@ HEADERS += \
     src/appenum.h \
     src/controller.h \
     src/define.h \
-    src/studentmodel.h \
-    src/workingdaymodel.h
+    src/studentmodel.h

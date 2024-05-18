@@ -14,7 +14,6 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<AppEnum>("AppEnum", 1, 0, "AppEnum", "Not creatable as it is an enum type");
     engine.rootContext()->setContextProperty("CTRL", Controller::getInstance());
     engine.rootContext()->setContextProperty("SV_MODEL", Controller::getInstance()->svModel());
-    engine.rootContext()->setContextProperty("DAY_MODEL", Controller::getInstance()->dayModel());
 
     const QUrl url(QStringLiteral("qrc:/ui/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

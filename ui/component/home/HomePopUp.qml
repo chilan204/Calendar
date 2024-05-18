@@ -11,6 +11,9 @@ Item {
         anchors.fill: parent
         color: "black"
         opacity: 0.2
+        MouseArea{
+            anchors.fill: parent
+        }
     }
 
     Rectangle {
