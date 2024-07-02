@@ -16,8 +16,8 @@ Controller *Controller::getInstance()
 void Controller::initialize()
 {
     readDatafromJson();
-    QDate currentDate = QDate::currentDate();
-    m_monthStatistical = currentDate.toString("MMMM, yyyy");
+    m_monthStatistical = QDate::currentDate();
+    m_maxWorkingDay = 0;
 }
 
 StudentModel *Controller::svModel()
@@ -42,12 +42,9 @@ void Controller::readDatafromJson()
         qDebug() << "Không thể phân tích JSON";
     }
 
-    m_data = jsonData.object();
+    m_data = jsonData.array();
 
-    m_svModel.initialize(m_data["student"].toArray());
-    foreach(const QJsonValue &value, m_data["workingDay"].toArray()){
-        m_listDay.append(value.toString());
-    }
+    m_svModel.initialize(m_data);
 }
 
 void Controller::writeDatafromJson()
@@ -64,12 +61,17 @@ void Controller::writeDatafromJson()
 }
 
 QString Controller::monthStatistical(){
-    return m_monthStatistical;
+    return m_monthStatistical.toString("MMMM, yyyy");
+}
+
+int Controller::maxWorkingDay()
+{
+    return m_maxWorkingDay;
 }
 
 void Controller::addStudent(QString addname, QString addcolor, QString tuition)
 {
-    foreach (QJsonValue item, m_data["student"].toArray()) {
+    foreach (QJsonValue item, m_data) {
         if (addcolor.toLower() == item.toObject()["Color"].toString().toLower()) {
             emit showNotifyPopUp("Màu đã được sử dụng!");
             return;
@@ -80,10 +82,9 @@ void Controller::addStudent(QString addname, QString addcolor, QString tuition)
     student["Name"] = addname;
     student["Color"] = addcolor.toLower();
     student["Tuition"] = tuition.toInt();
+    student["WorkingDay"] = QJsonObject();
 
-    QJsonArray arr = m_data["student"].toArray();
-    arr.append(student);
-    m_data["student"]= arr;
+    m_data.append(student);
 
     writeDatafromJson();
     m_svModel.append(addname, addcolor, tuition.toInt());
@@ -91,8 +92,8 @@ void Controller::addStudent(QString addname, QString addcolor, QString tuition)
 
 void Controller::modifyStudent(QString addname, QString addcolor, QString addtuition, int index)
 {
-    foreach (QJsonValue item, m_data["student"].toArray()) {
-        if (addcolor.toLower() != m_data["student"].toArray()[index].toObject()["Color"].toString().toLower() &&
+    foreach (QJsonValue item, m_data) {
+        if (addcolor.toLower() != m_data[index].toObject()["Color"].toString().toLower() &&
                 addcolor.toLower() == item.toObject()["Color"].toString().toLower()){
             emit showNotifyPopUp("Màu đã được sử dụng!");
             return;
@@ -103,10 +104,9 @@ void Controller::modifyStudent(QString addname, QString addcolor, QString addtui
     student["Name"] = addname;
     student["Color"] = addcolor.toLower();
     student["Tuition"] = addtuition.toInt();
+    student["WorkingDay"] = m_data[index].toObject()["WorkingDay"];
 
-    QJsonArray arr = m_data["student"].toArray();
-    arr[index] = student;
-    m_data["student"]= arr;
+    m_data[index] = student;
 
     writeDatafromJson();
     m_svModel.modify(addname, addcolor, addtuition.toInt(), index);
@@ -114,53 +114,54 @@ void Controller::modifyStudent(QString addname, QString addcolor, QString addtui
 
 void Controller::removeStudent(int index)
 {
-    QJsonArray arr = m_data["student"].toArray();
-    arr.removeAt(index);
-    m_data["student"]= arr;
+    m_data.removeAt(index);
 
     writeDatafromJson();
     m_svModel.remove(index);
+}
+
+void Controller::changeMonthStatistical(bool isNext)
+{
+    m_monthStatistical = m_monthStatistical.addMonths(isNext ? 1 : -1);
+    m_maxWorkingDay = 0;
+    emit maxWorkingDayChanged();
+    emit monthStatisticalChanged();
 }
 
 void Controller::modifyWorkingday(QDate workingday, QList<int> listcolor)
 {
     QString year = QString::number(workingday.year());
     QString month = QString::number(workingday.month());
-    QJsonObject obj = m_data["workingDay"].toObject();
-    QJsonObject objYear = obj[year].toObject();
-    QJsonArray arrMonth = objYear[month].toArray();
 
-    if(arrMonth.isEmpty())
-        for (int i = 0; i < m_data["student"].toArray().size(); i++) {
-            QJsonArray arr;
-            arrMonth.append(arr);
-        }
+    for(int i = 0; i < m_data.size(); i++) {
+        QJsonObject student = m_data[i].toObject();
+        QJsonObject workingDay = student["WorkingDay"].toObject();
+        QJsonObject yearObj = workingDay[year].toObject();
+        QJsonArray monthArr = yearObj[month].toArray();
 
-    for(int i = 0; i < m_data["student"].toArray().size(); i++) {
         if(listcolor.contains(i)) {
             std::set<int> arrSet;
-            foreach(QJsonValue item, arrMonth[i].toArray()){
+            foreach(QJsonValue item, monthArr){
                 arrSet.insert(item.toInt());
             }
             arrSet.insert(workingday.day());
-
-            QJsonArray arr;
+            monthArr = QJsonArray();
             foreach(int item, arrSet){
-                arr.append(item);
+                monthArr.append(item);
             }
-            arrMonth[i] = arr;
-        } else {
-            QJsonArray arr = arrMonth[i].toArray();
-            for(int j = 0; j < arrMonth[i].toArray().size(); j++)
-                if(arr[j].toInt() == workingday.day())
-                    arr.removeAt(j);
-            arrMonth[i] = arr;
         }
-    }
+        else {
+            for(int j = 0; j < monthArr.size(); j++) {
+                if(monthArr[j] == workingday.day())
+                    monthArr.removeAt(j);
+            }
+        }
 
-    objYear[month] = arrMonth;
-    obj[year] = objYear;
-    m_data["workingDay"] = obj;
+        yearObj[month] = monthArr;
+        workingDay[year] = yearObj;
+        student["WorkingDay"] = workingDay;
+        m_data[i] = student;
+    }
 
     writeDatafromJson();
     emit workingdayChanged(workingday);
@@ -168,22 +169,45 @@ void Controller::modifyWorkingday(QDate workingday, QList<int> listcolor)
 
 QList<QString> Controller::getListColorDate(QDate workingday)
 {
-    QJsonArray arr = m_data["workingDay"].toObject()[QString::number(workingday.year())].toObject()
-            [QString::number(workingday.month())].toArray();
     QList<QString> listColor;
     
-    for(int i = 0; i < arr.size(); i++) {
-        if(arr[i].toArray().contains(workingday.day())) {
-            listColor.append(m_data["student"].toArray()[i].toObject()["Color"].toString());
+    for(int i = 0; i < m_data.size(); i++) {
+        if(m_data[i].toObject()["WorkingDay"].toObject()[QString::number(workingday.year())].toObject()
+                [QString::number(workingday.month())].toArray().contains(workingday.day())) {
+            listColor.append(m_data[i].toObject()["Color"].toString());
         }
     }
     return listColor;
 }
 
-int Controller::getWorkingDay(QDate workingday)
+int Controller::getWorkingDay(QString color)
 {
-    QJsonArray arr = m_data["workingDay"].toObject()[QString::number(workingday.year())].toObject()
-            [QString::number(workingday.month())].toArray();
-//    qDebug() <<
-//    return arr.size();
+    int count = 0;
+    foreach (QJsonValue item, m_data) {
+        if (color.toLower() == item.toObject()["Color"].toString().toLower()){
+            count = item.toObject()["WorkingDay"].toObject()[QString::number(m_monthStatistical.year())].toObject()[QString::number(m_monthStatistical.month())].toArray().size();
+        }
+    }
+
+    if(count > m_maxWorkingDay) {
+        m_maxWorkingDay = count;
+        emit maxWorkingDayChanged();
+    }
+
+    return count;
+}
+
+bool Controller::getColorDate(QDate workingday, QString color)
+{
+    if(workingday.month() != m_monthStatistical.month()){
+        return false;
+    }
+
+    for(int i = 0; i < m_data.size(); i++) {
+        if(color == m_data[i].toObject()["Color"].toString() && m_data[i].toObject()["WorkingDay"].toObject()[QString::number(workingday.year())].toObject()
+                [QString::number(workingday.month())].toArray().contains(workingday.day())) {
+            return true;
+        }
+    }
+    return false;
 }

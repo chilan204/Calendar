@@ -22,5 +22,6 @@
         <file>Icon/Next.png</file>
         <file>Icon/Previous.png</file>
         <file>ui/component/statistical/TimeBar.qml</file>
+        <file>ui/component/statistical/StatisticalPopUp.qml</file>
     </qresource>
 </RCC>

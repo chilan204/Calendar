@@ -3,10 +3,9 @@ import QtQuick 2.0
 Item {
     id: root
 
-
     Text {
         id: month
-        text: "CTRL.monthStatistical"
+        text: CTRL.monthStatistical
         font.pixelSize: 20
         anchors {
             verticalCenter: parent.verticalAlignment
@@ -28,6 +27,7 @@ Item {
             onPressed: parent.scale = 0.8
             onReleased: parent.scale = 1
             onClicked: {
+                CTRL.changeMonthStatistical(true);
             }
         }
     }
@@ -46,6 +46,7 @@ Item {
             onPressed: parent.scale = 0.8
             onReleased: parent.scale = 1
             onClicked: {
+                CTRL.changeMonthStatistical(false);
             }
         }
     }

@@ -24,34 +24,9 @@ Item {
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: title.bottom
-            topMargin: 20
+            topMargin: 15
         }
     }
-
-//    PathView {
-//        id: timeBar
-//        anchors.fill: parent
-//        model: 12
-//        delegate: Rectangle {
-//            width: 80
-//            height: 40
-//            radius: 40
-//            border.color: "black"
-//            opacity: PathView.isCurrentItem ? 1 : 0.5
-
-//            Text {
-//                text: "Tháng " + (index + 1)
-//                font.pixelSize: 15
-//                anchors.centerIn: parent
-//            }
-//        }
-//        path: Path {
-//            startX: 250
-//            startY: 100
-//            PathQuad { x: 250; y: 50; controlX: 1000; controlY: 75 }
-//            PathQuad { x: 250; y: 100; controlX: -500; controlY: 75 }
-//        }
-//    }
 
     Rectangle {
         id: axisBar
@@ -59,17 +34,17 @@ Item {
         height: 3
         anchors {
             horizontalCenter: parent.horizontalCenter
-            bottom: scrollBar.top
-            bottomMargin: 50
+            bottom: parent.bottom
+            bottomMargin: 60
         }
         color: "black"
     }
 
     ListView {
         id: liststudent
-        width: 375
+        width: 350
         height: 360
-        spacing: 25
+        spacing: 50
         orientation: ListView.Horizontal
         clip: true
         anchors {
@@ -82,21 +57,32 @@ Item {
         delegate: StudentItem {
             nameStudent: model.name
             colorStudent: model.color
-//            workingDay: CTRL.getWorkingDay[index]
-            MouseArea {
-                anchors.fill: parent
+            workingDay: CTRL.getWorkingDay(model.color)
+            anchors.bottom: parent.bottom
+
+            Connections {
+                target: CTRL
+                function onMonthStatisticalChanged(){
+                    workingDay = CTRL.getWorkingDay(model.color)
+                }
             }
         }
     }
 
-    ScrollBar {
-        id: scrollBar
-        width: parent.width - 100
-        height: 3
-        anchors {
-            bottom: parent.bottom
-            bottomMargin: 5
-        }
-        opacity: 0.5
+//    ScrollBar {
+//        id: scrollBar
+//        width: parent.width - 100
+//        height: 3
+//        anchors {
+//            bottom: parent.bottom
+//            bottomMargin: 5
+//        }
+//        opacity: 0.5
+//    }
+
+    StatisticalPopUp {
+        id: statisticalPopUp
+        visible: false
+        anchors.fill: parent
     }
 }
